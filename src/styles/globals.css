@@ -1,0 +1,71 @@
+/** @format */
+
+#__next {
+  min-height: 100dvh;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+.sidenav.navbar {
+  height: 100dvh;
+}
+.navbar-vertical.navbar-expand-xs .navbar-nav .nav-link {
+  border-radius: 12px;
+}
+.navbar-vertical.navbar-expand-xs .navbar-nav .nav-link:hover {
+  box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+  background-color: #eeeeee;
+}
+.edit__form fieldset {
+  margin-bottom: 25px;
+}
+.edit__form fieldset input,
+.edit__form fieldset select,
+.edit__form fieldset select option,
+.edit__form fieldset textarea {
+  width: 100%;
+  border: 1px solid #aaa;
+  padding: 8px 10px;
+  border-radius: 10px;
+  resize: none;
+  font-size: 16px;
+  font-weight: 600;
+  height: 40px;
+}
+.edit__form h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+.edit__form fieldset textarea {
+  height: 220px;
+}
+.edit__form fieldset label {
+  font-size: 16px;
+  font-weight: 600;
+  display: block;
+  margin-left: 0;
+  color: #010101;
+}
+.edit__form {
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+}
+.sidenav.navbar.navbar-vertical {
+  background-color: #fff;
+  border-radius: 0 16px 16px 0;
+}
+.btn.bg-gradient-info .spinner-border {
+  width: 20px;
+  height: 20px;
+}
+.h-screen .page-header{
+  height: 100dvh;
+}
+.h-screen{
+  min-height: 100dvh;
+}
