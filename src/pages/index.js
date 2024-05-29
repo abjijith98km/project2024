@@ -13,19 +13,12 @@ export default function Home() {
   // const [user, setUser] = useState(null);
   const router = useRouter();
   useEffect(() => {
-    // const auth = getAuth(app);
-    // const unsubscribe = onAuthStateChanged(auth, (user) => {
-    //   if (user) {
-    //     // setUser(user);
-    //     // setLoading(false);
-    //   } else {
-    //     // setUser(null);
-    //     // setLoading(false);
-    //     router.push('/login');
-    //   }
-    // });
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push('/login')
+      }
+    });
 
-    // return () => unsubscribe();
   }, [router]);
   return (
     <>
@@ -73,20 +66,32 @@ export default function Home() {
     </>
   );
 }
-export const getServerSideProps = async ({ req, res }) => {
-  // const auth = getAuth(app);
-  const user = auth.currentUser;
+// export const getServerSideProps = async ({ req, res }) => {
+//   // const auth = getAuth(app);
+//   const user = auth.currentUser;
 
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+//   if (!user) {
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       },
+//     };
+//   }
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       // User is signed in, see docs for a list of available properties
+//       // https://firebase.google.com/docs/reference/js/auth.user
+//       const uid = user.uid;
+//       console.log(uid);
+//       // ...
+//     } else {
+//       // User is signed out
+//       // ...
+//     }
+//   });
 
-  return {
-    props: {}, // No additional props required for this page
-  };
-};
+//   return {
+//     props: {}, // No additional props required for this page
+//   };
+// };

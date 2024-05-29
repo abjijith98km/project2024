@@ -63,9 +63,13 @@ body {
   width: 20px;
   height: 20px;
 }
-.h-screen .page-header{
+.h-screen .page-header {
   height: 100dvh;
 }
-.h-screen{
+.h-screen {
   min-height: 100dvh;
+}
+ul,
+ol {
+  list-style: none;
 }

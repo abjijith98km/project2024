@@ -4,7 +4,8 @@ import SIdebar from "@/components/SIdebar";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore/lite";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import { db } from "../../../../lib/firebase";
+import { auth, db } from "../../../../lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const index = ({ id }) => {
     // const [player, setPlayer] = useState(null);
@@ -22,7 +23,16 @@ const index = ({ id }) => {
     const Performance = useRef("");
     const Position = useRef("");
     const Weight = useRef("");
+    const router = useRouter();
 
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                router.push('/login')
+            }
+        });
+
+    }, [router]);
     useEffect(() => {
         // const fetchPlayer = async () => {
         //     try {

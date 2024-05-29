@@ -2,12 +2,24 @@
 
 import SIdebar from "@/components/SIdebar";
 import React, { useEffect, useState } from "react";
-import { db } from "../../../lib/firebase";
+import { auth, db } from "../../../lib/firebase";
 import { collection, getDoc, getDocs } from "firebase/firestore/lite";
 import Link from "next/link";
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/router";
 
 const index = () => {
   const [players, setPlayers] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push('/login')
+      }
+    });
+
+  }, [router]);
   useEffect(() => {
     const fetchPlayers = async () => {
       const querySnapshot = await getDocs(collection(db, "players"));
@@ -19,7 +31,6 @@ const index = () => {
     };
 
     fetchPlayers();
-    console.log("rendered");
   }, []);
 
   return (
@@ -70,7 +81,7 @@ const index = () => {
 
                   {players?.map((player, index) => {
                     return (
-                      <tr key={index}>
+                      <tr key={player.id}>
                         <td>
                           <div className="d-flex px-2 py-1">
                             <div className="d-flex flex-column justify-content-center">
