@@ -2,10 +2,9 @@
 
 import SIdebar from "@/components/SIdebar";
 import { addDoc, collection } from "firebase/firestore/lite";
-import React, { useEffect, useRef, useState } from "react";
-import { auth, db } from "../../../../lib/firebase";
+import React, { useRef, useState } from "react";
+import { db } from "../../../../lib/firebase";
 import { useRouter } from "next/router";
-import { onAuthStateChanged } from "firebase/auth";
 
 const index = () => {
   const [submitting, setsubmitting] = useState(false);
@@ -13,13 +12,7 @@ const index = () => {
     { Name: "", Performance_summary: "", Weakness: "" },
   ]);
   const route = useRouter();
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        route.push("/login");
-      }
-    });
-  }, [route]);
+
   const Name = useRef("");
   const SessionDate = useRef("");
   const Time = useRef("");
@@ -27,6 +20,7 @@ const index = () => {
   const submitData = async (e) => {
     e.preventDefault();
     setsubmitting(true);
+
     const data = {
       Name: Name.current.value,
       Date: `${new Date(SessionDate.current.value).getDate()}/${new Date(
@@ -37,10 +31,10 @@ const index = () => {
       Players_performance: recordedPerformance,
     };
     try {
-      const docRef = await addDoc(collection(db, "attendance"), data);
+      const docRef = await addDoc(collection(db, "matches"), data);
       alert("Data saved ");
       setsubmitting(false);
-      route.push("/attendance");
+      route.push("/matches");
     } catch (error) {
       console.error("Error adding document: ", error);
       setsubmitting(false);

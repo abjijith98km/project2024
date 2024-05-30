@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { auth, db } from "../../../lib/firebase";
 import SIdebar from "@/components/SIdebar";
 import { doc, getDoc } from "firebase/firestore/lite";
+import Link from "next/link";
 
 const ViewDetails = ({ id }) => {
   const [attendanceList, setattendanceList] = useState(null);
@@ -40,6 +41,11 @@ const ViewDetails = ({ id }) => {
     <>
       <SIdebar />
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
+        <Link href={'/attendance/addnew'}
+          className="btn bg-gradient-info mt-3 mb-4"
+        >
+          Add New
+        </Link>
         <div className="edit__form">
           <h2 className="mb-4">Details</h2>
           {attendanceList == null && (
@@ -71,7 +77,7 @@ const ViewDetails = ({ id }) => {
               </h6>
               {attendanceList?.Players_performance?.map((player, index) => {
                 return (
-                  <div className="row">
+                  <div className="row" key={index}>
                     <div className="col-12 col-md-6 col-lg-4 col-xl-3- mb-2">
                       <p key={index} className="mb-2">
                         <strong>Name: </strong>

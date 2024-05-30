@@ -1,48 +1,77 @@
 /** @format */
 
 import SIdebar from "@/components/SIdebar";
-import { addDoc, collection } from "firebase/firestore/lite";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore/lite";
 import React, { useEffect, useRef, useState } from "react";
-import { auth, db } from "../../../../lib/firebase";
+import { db } from "../../../../lib/firebase";
 import { useRouter } from "next/router";
-import { onAuthStateChanged } from "firebase/auth";
+import Link from "next/link";
 
-const index = () => {
+const index = ({ id }) => {
   const [submitting, setsubmitting] = useState(false);
   const [recordedPerformance, setrecordedPerformance] = useState([
     { Name: "", Performance_summary: "", Weakness: "" },
   ]);
+  const [attendanceList, setattendanceList] = useState(null);
+
   const route = useRouter();
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        route.push("/login");
-      }
-    });
-  }, [route]);
+
   const Name = useRef("");
   const SessionDate = useRef("");
   const Time = useRef("");
   const Attendance = useRef("");
+
+  useEffect(() => {
+    const fetchAttendanceData = async () => {
+      try {
+        const attendanceDoc = await getDoc(doc(db, "matches", id));
+        if (attendanceDoc.exists()) {
+          setattendanceList({ id: attendanceDoc.id, ...attendanceDoc.data() });
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching document: ", error);
+      }
+    };
+
+    fetchAttendanceData();
+  }, []);
+  useEffect(() => {
+    if (attendanceList !== null) {
+      deliverData();
+    }
+    return () => {
+    }
+  }, [attendanceList])
+
+  const deliverData = () => {
+    Name.current.value = attendanceList?.Name;
+    Time.current.value = attendanceList?.Time;
+    Attendance.current.value = attendanceList?.Attendance;
+    setrecordedPerformance(attendanceList?.Players_performance)
+    // let date = new Date(attendanceList?.Date.split('/')[2], attendanceList?.Date.split('/')[1], attendanceList?.Date.split('/')[0]) 
+    // console.log(new Date(attendanceList?.Date.split('/')[2], attendanceList?.Date.split('/')[1], attendanceList?.Date.split('/')[0]));
+    SessionDate.current.value = attendanceList?.Date
+  }
+
   const submitData = async (e) => {
     e.preventDefault();
     setsubmitting(true);
     const data = {
       Name: Name.current.value,
-      Date: `${new Date(SessionDate.current.value).getDate()}/${new Date(
-        SessionDate.current.value
-      ).getMonth()}/${new Date(SessionDate.current.value).getFullYear()}`,
       Time: Time.current.value,
       Attendance: Attendance.current.value,
       Players_performance: recordedPerformance,
+      Date: SessionDate.current.value,
     };
     try {
-      const docRef = await addDoc(collection(db, "attendance"), data);
-      alert("Data saved ");
+      await setDoc(doc(db, "matches", id), data, { merge: true });
+      alert("Successfully saved!");
+      route.push("/matches");
       setsubmitting(false);
-      route.push("/attendance");
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error writing document: ", error);
       setsubmitting(false);
     }
   };
@@ -112,6 +141,11 @@ const index = () => {
       <SIdebar />
 
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
+        <Link href={'/matches/addnew'}
+          className="btn bg-gradient-info mt-3 mb-4"
+        >
+          Add New
+        </Link>
         <div className="edit__form">
           <h2>Fill the details</h2>
           <form className={`row`} onSubmit={(e) => submitData(e)}>
@@ -122,7 +156,7 @@ const index = () => {
             </fieldset>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="date">Date</label>
-              <input type="date" id="date" ref={SessionDate} required />
+              <input type="text" id="date" ref={SessionDate} required />
             </fieldset>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="time">Time</label>
@@ -215,3 +249,11 @@ const index = () => {
 };
 
 export default index;
+export async function getServerSideProps(context) {
+  const { slug } = context.query;
+  return {
+    props: {
+      id: slug,
+    },
+  };
+}
