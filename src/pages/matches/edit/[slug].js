@@ -148,7 +148,14 @@ const index = ({ id }) => {
         </Link>
         <div className="edit__form">
           <h2>Fill the details</h2>
-          <form className={`row`} onSubmit={(e) => submitData(e)}>
+          {attendanceList == null && (
+            <div
+              className="spinner-border text-primary d-block mx-auto my-5"
+              role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          )}
+          <form className={`row ${attendanceList == null && "d-none"}`} onSubmit={(e) => submitData(e)}>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="name">Name of the session</label>
 
