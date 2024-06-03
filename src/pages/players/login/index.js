@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../../../../lib/firebase";
+import Link from "next/link";
 
 const index = () => {
     const username = useRef()
@@ -96,6 +97,8 @@ const index = () => {
                                             </div>
                                         </form>
                                     </div>
+                                    <p className="mb-0 card-header bg-transparent">New user? <Link className="link" href={"/players/register"}>Register</Link></p>
+
                                 </div>
                             </div>
                             <div className="col-md-6">
