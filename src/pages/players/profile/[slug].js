@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore/lite";
 import { db } from "../../../../lib/firebase";
+import Link from "next/link";
+import Head from "next/head";
 
 const ViewDetails = ({ id }) => {
   const [attendanceList, setattendanceList] = useState(null);
@@ -12,11 +14,10 @@ const ViewDetails = ({ id }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // onAuthStateChanged(auth, (user) => {
-    //     if (!user) {
-    //         router.push("/login");
-    //     }
-    // });
+    const USERLOGGED_IN = localStorage.getItem('USERLOGGED_IN')
+    if (USERLOGGED_IN !== "true") {
+      router.push('/players/login')
+    }
   }, [router]);
 
   useEffect(() => {
@@ -35,11 +36,33 @@ const ViewDetails = ({ id }) => {
 
     fetchAttendanceData();
   }, []);
+  function signMeOut(e) {
+    e.preventDefault();
+
+    localStorage.setItem('USERLOGGED_IN', "")
+    localStorage.setItem('USERNAME_SET', "")
+    router.push('/players/login')
+  }
   return (
     <>
+      <Head>
+        <title>Profile</title>
+      </Head>
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
-        <div className="edit__form m-5">
-          <h2 className="mb-4">Details</h2>
+        <div className="edit__form mx-5" style={{ width: "auto" }}>
+          <Link href={`/players/profile/edit/${id}`}
+            className="btn bg-gradient-info mt-3 mb-4 float-end"
+          >
+            Edit
+          </Link>
+          <button onClick={(e) => signMeOut(e)}
+            className="btn bg-gradient-primary mt-3 me-4 mb-4 float-end"
+          >
+            Log out
+          </button>
+          <h2 className="mb-5">Profile</h2>
+
+          {/* <h2 className="mb-4">Details</h2> */}
           {attendanceList == null && (
             <div
               className="spinner-border text-primary d-block mx-auto my-5"

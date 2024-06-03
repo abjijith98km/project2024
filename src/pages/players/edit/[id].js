@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { auth, db } from "../../../../lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import Head from "next/head";
 
 const index = ({ id }) => {
   const [player, setPlayer] = useState(null);
@@ -97,6 +98,9 @@ const index = ({ id }) => {
   };
   return (
     <>
+      <Head>
+        <title>Edit player</title>
+      </Head>
       <SIdebar />
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
         <div className="edit__form">

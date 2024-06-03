@@ -22,6 +22,9 @@ export default function Home() {
   }, [router]);
   return (
     <>
+      <Head>
+        <title>Dashboard</title>
+      </Head>
       <SIdebar />
       <>
         <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">

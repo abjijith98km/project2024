@@ -5,6 +5,7 @@ import { auth, db } from '../../../lib/firebase';
 import SIdebar from '@/components/SIdebar';
 import Link from 'next/link';
 import { collection, getDocs } from 'firebase/firestore/lite';
+import Head from 'next/head';
 
 const index = () => {
     const router = useRouter();
@@ -32,7 +33,10 @@ const index = () => {
         fetchAttendanceList();
     }, []);
     return (
-        <>      <SIdebar />
+        <>
+            <Head>
+                <title>Matches</title>
+            </Head>   <SIdebar />
             <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
                 <Link href={'/matches/addnew'}
                     className="btn bg-gradient-info mt-3 mb-4"
@@ -117,7 +121,7 @@ const index = () => {
                                                     <Link
                                                         href={`/matches/edit/${player.id}`}
                                                         className="text-secondary font-weight-bold text-xs  ms-5"
-                                                      >
+                                                    >
                                                         Edit
                                                     </Link>
                                                 </td>

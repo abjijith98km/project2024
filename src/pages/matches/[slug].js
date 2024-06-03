@@ -7,6 +7,7 @@ import { auth, db } from "../../../lib/firebase";
 import SIdebar from "@/components/SIdebar";
 import { doc, getDoc } from "firebase/firestore/lite";
 import Link from "next/link";
+import Head from "next/head";
 
 const ViewDetails = ({ id }) => {
     const [attendanceList, setattendanceList] = useState(null);
@@ -39,6 +40,9 @@ const ViewDetails = ({ id }) => {
     }, []);
     return (
         <>
+            <Head>
+                <title>Match details</title>
+            </Head>
             <SIdebar />
             <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
                 <Link href={'/matches/addnew'}

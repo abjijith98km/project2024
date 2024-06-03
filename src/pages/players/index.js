@@ -7,6 +7,7 @@ import { collection, getDoc, getDocs } from "firebase/firestore/lite";
 import Link from "next/link";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const index = () => {
   const [players, setPlayers] = useState(null);
@@ -35,6 +36,9 @@ const index = () => {
 
   return (
     <>
+    <Head>
+      <title>All Players</title>
+    </Head>
       <SIdebar />
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
         <Link href={'/players/add'}
@@ -44,7 +48,7 @@ const index = () => {
         </Link>
         <div className="card mb-4">
           <div className="card-header pb-0">
-            <h6>All PLayers</h6>
+            <h6>All Players</h6>
           </div>
           <div className="card-body px-0 pt-0 pb-2">
             <div className="table-responsive p-0">

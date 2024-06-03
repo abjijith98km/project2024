@@ -5,6 +5,7 @@ import { addDoc, collection } from "firebase/firestore/lite";
 import React, { useRef, useState } from "react";
 import { db } from "../../../../lib/firebase";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const index = () => {
   const [submitting, setsubmitting] = useState(false);
@@ -103,6 +104,9 @@ const index = () => {
 
   return (
     <>
+      <Head>
+        <title>Add new match</title>
+      </Head>
       <SIdebar />
 
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
