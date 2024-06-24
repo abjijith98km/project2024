@@ -32,6 +32,28 @@ const index = () => {
 
         fetchAttendanceList();
     }, []);
+
+    function printStatus(dateString){
+        // Parse the input date string into a Date object
+        let parts = dateString.split('/');
+        let day = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10);
+        let year = parseInt(parts[2], 10);
+
+        // Months in JavaScript Date are 0-indexed, so we need to subtract 1 from the month
+        let inputDate = new Date(year, month - 1, day);
+
+        // Get today's date
+        let today = new Date();
+
+        // Compare inputDate with today's date
+        if (inputDate > today) {
+            return "upcoming";
+        } else {
+            return "completed";
+        }
+
+    }
     return (
         <>
             <Head>
@@ -63,6 +85,9 @@ const index = () => {
                                         </th>
                                         <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Attendance
+                                        </th>
+                                        <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Status
                                         </th>
                                         <th className="text-secondary opacity-7"></th>
                                     </tr>
@@ -108,6 +133,11 @@ const index = () => {
                                                 <td className="align-middle text-center">
                                                     <span className="text-secondary text-xs font-weight-bold">
                                                         {player.Attendance}
+                                                    </span>
+                                                </td>
+                                                <td className="align-middle text-center">
+                                                    <span className={`btn btn-sm px-4 btn-${printStatus(player.Date) == "completed"?'warning':'success'}`}>
+                                                        {printStatus(player.Date)}
                                                     </span>
                                                 </td>
                                                 <td className="align-middle">
