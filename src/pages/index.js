@@ -33,11 +33,10 @@ export default function Home() {
               <div className="row">
                 <div className="col-lg-6">
                   <div className="d-flex flex-column h-100">
-                    <p className="mb-1 pt-2 text-bold">Welcome</p>
-                    <h5 className="font-weight-bolder">Players Dashboard</h5>
+                    <p className="mb-1 pt-2 text-bold">Welcome to the</p>
+                    <h5 className="font-weight-bolder">Football Manager Player Monitoring System</h5>
                     <p className="mb-5">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Animi perferendis ipsa cumque?
+                      We are dedicated to revolutionizing the way football managers handle team and player management. Our mission is to provide an intuitive, comprehensive platform that empowers managers to efficiently track player profiles, schedule training sessions, and analyze match performance. By centralizing all essential data and offering easy access for both managers and players, we aim to enhance decision-making, optimize training strategies, and foster player development. Join us in transforming football management with our innovative and user-friendly solution.
                     </p>
                     {/* <a className="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
                     Read More
@@ -46,7 +45,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                  <div className="bg-gradient-primary border-radius-lg h-100">
+                  <div className="bg-gradient-primary- border-radius-lg h-100">
                     <img
                       src="/assets/img/shapes/waves-white.svg"
                       className="position-absolute h-100 w-50 top-0 d-lg-block d-none"
@@ -54,9 +53,10 @@ export default function Home() {
                     />
                     <div className="position-relative d-flex align-items-center justify-content-center h-100">
                       <img
-                        className="w-100 position-relative z-index-2 pt-4"
-                        src="/assets/img/illustrations/rocket-white.png"
+                        className="w-100  h-100 position-relative z-index-2 pt-4-"
+                        src="/side2.jpg"
                         alt="rocket"
+                        style={{'objectFit':'cover'}}
                       />
                     </div>
                   </div>

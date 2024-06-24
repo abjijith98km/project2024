@@ -38,7 +38,7 @@ const SIdebar = () => {
             className="navbar-brand-img h-100"
             alt="main_logo"
           />
-          <span className="ms-1 font-weight-bold">Football</span>
+          <span className="ms-1 font-weight-bold">FMPMS</span>
         </Link>
       </div>
       <hr className="horizontal dark mt-0" />
