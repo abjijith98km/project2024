@@ -29,32 +29,35 @@ const index = () => {
         fetchPlayers();
     }, []);
     const handleLogin = (e) => {
-        setloading(true)
         e.preventDefault();
-        let foundPlayer = null;
-        let emailpresent = false;
-        players?.map((p) => {
-            if (p?.Email === username.current.value) {
-                emailpresent = true;
-                foundPlayer = p;
-            }
-        })
-        if (emailpresent == false) {
-            alert('Email not found');
-            setloading(false)
-        } else if (password.current.value == foundPlayer?.Password) {
-            setloading(false)
-            alert('Login Successful!');
-            localStorage.setItem('USERNAME_SET', foundPlayer?.id);
-            localStorage.setItem('USERLOGGED_IN', true);
-            router.push(`/players/profile/${foundPlayer?.id}`);
-        } else {
-            alert('wrong password');
-            setloading(false)
+        setloading(true);
 
+        // Get the entered email and password
+        const enteredEmail = username.current.value;
+        const enteredPassword = password.current.value;
+
+        // Check if a player with the entered email exists and is verified
+        const foundPlayer = players.find(p => p?.Email === enteredEmail && p?.verified);
+
+        if (!foundPlayer) {
+            alert('Email not found or player is not verified');
+            setloading(false);
+            return;
         }
 
-    }
+        // Check if the entered password matches the found player's password
+        if (enteredPassword === foundPlayer.Password) {
+            setloading(false);
+            alert('Login Successful!');
+            localStorage.setItem('USERNAME_SET', foundPlayer.id);
+            localStorage.setItem('USERLOGGED_IN', true);
+            router.push(`/players/profile/${foundPlayer.id}`);
+        } else {
+            alert('Wrong password');
+            setloading(false);
+        }
+    };
+
     return (
         <>
             <Head>

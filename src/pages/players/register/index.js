@@ -1,8 +1,9 @@
 /** @format */
 
 import Login from "@/components/Login";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore/lite";
+import { addDoc, collection, getDocs, query, doc, updateDoc, where, setDoc } from "firebase/firestore/lite";
 import Head from "next/head";
+
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../../../../lib/firebase";
@@ -102,25 +103,38 @@ const index = () => {
         getDocs(q)
             .then((querySnapshot) => {
                 if (querySnapshot.size > 0) {
-                    // Player with matching email and auth token found
-                    querySnapshot.forEach((doc) => {
-                        const playerData = doc.data();
+                    // Loop through each document in the query result
+                    querySnapshot.forEach(async (doc) => {
+                        const playerId = doc.id; // Get the document ID
+                        const playerData = doc.data(); // Get the document data
+                        verifyUserAndSendAToLogin(playerId)
+                        // Prepare data to update (in this case, setting verified = true)
 
-                        alert('player verified')
-                        let docref = localStorage.getItem('USERNAME_SET')
-                        router.push(`/players/profile/${docref}`);
 
-                        console.log('Player found:', playerData);
-                        // Proceed with your verification logic here
+
                     });
                 } else {
-                    // No player found with matching email and auth token
                     console.log('No player found with matching email and auth token');
                 }
             })
             .catch((error) => {
-                console.error('Error searching for player:', error);
+                console.error('Error querying players collection:', error);
             });
+    }
+    const verifyUserAndSendAToLogin = async (playerId) => {
+        const dataToUpdate = {
+            verified: true,
+        }
+        try {
+            // Update the document with merge: true to only update the specified fields
+            await setDoc(doc(db, 'players', playerId), dataToUpdate, { merge: true });
+
+            // Notify user and redirect to profile page
+            alert('Player verified successfully');
+            router.push(`/players/profile/${playerId}`);
+        } catch (error) {
+            console.error('Error updating document:', error);
+        }
     }
     return (
         <>
