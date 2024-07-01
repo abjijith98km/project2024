@@ -1,7 +1,16 @@
 /** @format */
 
 import SIdebar from "@/components/SIdebar";
-import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore/lite";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore/lite";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { auth, db } from "../../../../lib/firebase";
@@ -9,203 +18,236 @@ import { onAuthStateChanged } from "firebase/auth";
 import Head from "next/head";
 
 const index = ({ id }) => {
-    // const [player, setPlayer] = useState(null);
-    const [submitting, setsubmitting] = useState(false);
-    const route = useRouter();
+  // const [player, setPlayer] = useState(null);
+  const [submitting, setsubmitting] = useState(false);
+  const [ageValue, setAgeValue] = useState(18);
+  const handleChange = (e) => {
+    setAgeValue(e.target.value);
+  };
 
-    const Name = useRef("");
-    const Email = useRef("");
-    const Gender = useRef("Male");
-    const Age = useRef("");
-    const Foot = useRef("Right");
-    const Height = useRef("");
-    const Mother_tongue = useRef("");
-    const Nationality = useRef("USA");
-    const Performance = useRef("");
-    const Password = useRef("");
-    const Position = useRef("");
-    const Weight = useRef("");
-    const router = useRouter();
+  const route = useRouter();
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                router.push('/login')
-            }
-        });
+  const Name = useRef("");
+  const Email = useRef("");
+  const Gender = useRef("Male");
+  const Age = useRef("");
+  const Foot = useRef("Right");
+  const Height = useRef(5.5);
+  const Mother_tongue = useRef("");
+  const Nationality = useRef("USA");
+  const Performance = useRef("");
+  const Password = useRef("");
+  const Position = useRef("");
+  const TrainingPerformance = useRef();
+  const Weight = useRef(58);
+  const router = useRouter();
 
-    }, [router]);
-    useEffect(() => {
-        // const fetchPlayer = async () => {
-        //     try {
-        //         const playerDoc = await getDoc(doc(db, "players", id));
-        //         if (playerDoc.exists()) {
-        //             setPlayer({ id: playerDoc.id, ...playerDoc.data() });
-        //         } else {
-        //             console.log("No such document!");
-        //         }
-        //     } catch (error) {
-        //         console.error("Error fetching document: ", error);
-        //     }
-        // };
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/login");
+      }
+    });
+  }, [router]);
+  useEffect(() => {
 
-        // fetchPlayer();
-        console.log("rendered");
-    }, []);
-    // useEffect(() => {
-    //     deliverDate();
+    console.log("rendered");
+  }, []);
 
-    //     return () => { };
-    // }, [player]);
+ const submitData = async (e) => {
+   e.preventDefault();
+   setsubmitting(true);
+   const data = {
+     Name: Name.current.value,
+     Age: Age.current.value,
+     Email: Email.current.value,
+     Password: Password.current.value,
+     Foot: Foot.current.value,
+     Gender: Gender.current.value,
+     Height: Height.current.value,
+     Mother_tongue: Mother_tongue.current.value,
+     Nationality: Nationality.current.value,
+     Performance: Performance.current.value,
+     TrainingPerformance: TrainingPerformance.current.value,
+     Position: Position.current.value,
+     Weight: Weight.current.value,
+   };
 
-    // const deliverDate = () => {
-    //     Name.current.value = player?.Name;
-    //     Age.current.value = player?.Age;
-    //     Email.current.value = player?.Email;
-    //     Foot.current.value = player?.Foot;
-    //     Gender.current.value = player?.Gender;
-    //     Height.current.value = player?.Height;
-    //     Mother_tongue.current.value = player?.Mother_tongue;
-    //     Nationality.current.value = player?.Nationality;
-    //     Performance.current.value = player?.Performance;
-    //     Position.current.value = player?.Position;
-    //     Weight.current.value = player?.Weight;
-    // };
-    const submitData = async (e) => {
-        e.preventDefault();
-        setsubmitting(true);
-        const data = {
-            Name: Name.current.value,
-            Age: Age.current.value,
-            Email: Email.current.value,
-            Password: Password.current.value,
-            Foot: Foot.current.value,
-            Gender: Gender.current.value,
-            Height: Height.current.value,
-            Mother_tongue: Mother_tongue.current.value,
-            Nationality: Nationality.current.value,
-            Performance: Performance.current.value,
-            Position: Position.current.value,
-            Weight: Weight.current.value,
-        };
-        // try {
-        //     await setDoc(doc(db, "players", id), data, { merge: true });
-        //     alert("Document successfully written!");
+   try {
+     // Check if a player with the same email already exists
+     const q = query(
+       collection(db, "players"),
+       where("Email", "==", data.Email)
+     );
+     const querySnapshot = await getDocs(q);
 
-        // } catch (error) {
-        //     console.error("Error writing document: ", error);
-        //     setsubmitting(false);
-        // }
+     if (!querySnapshot.empty) {
+       alert("A player with this email already exists.");
+       setsubmitting(false);
+       return;
+     }
 
-
-        try {
-            const docRef = await addDoc(collection(db, "players"), data);
-            alert("Data saved ");
-            setsubmitting(false);
-            route.push("/players");
-        } catch (error) {
-            console.error("Error adding document: ", error);
-            setsubmitting(false);
-        }
-    };
-    return (
-        <>
-            <Head>
-                <title>Add new player</title>
-            </Head>
-            <SIdebar />
-            <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
-                <div className="edit__form">
-                    <h2>Fill the details</h2>
-                    <form
-                        className={`row`}
-                        onSubmit={(e) => submitData(e)}>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="name">Name</label>
-                            <input type="text" id="name" ref={Name} required/>
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="email">Email</label>
-                            <input type="email" id="email" ref={Email} required />
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="Password">Password</label>
-                            <input type="text" id="Password" ref={Password} required />
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="age">Age</label>
-                            <input type="number" id="age" ref={Age} />
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="gender">Gender</label>
-                            <select name="gender" id="gender" ref={Gender}>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Not Disclosed">Not Disclosed</option>
-                            </select>
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="position">Poition</label>
-                            <input type="text" id="position" ref={Position} />
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="language">Mother tongue</label>
-                            <input type="text" id="language" ref={Mother_tongue} />
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="nationality">Nationality</label>
-                            <select name="nationality" id="nationality" ref={Nationality}>
-                                <option value="India">India</option>
-                                <option value="USA">USA</option>
-                                <option value="Pakistan">Pakistan</option>
-                                <option value="Bangladesh">Bangladesh</option>
-                                <option value="United Kingdom">United Kingdom</option>
-                                <option value="UAE">UAE</option>
-                            </select>
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="height">Height (in feet.)</label>
-                            <input type="text" id="height" ref={Height} />
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="weight">Weight (in Kg)</label>
-                            <input type="text" id="weight" ref={Weight} />
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="foot">Left foor or right foot</label>
-                            <select name="foot" id="foot" ref={Foot}>
-                                <option value="Right">Right</option>
-                                <option value="Left">Left</option>
-                            </select>
-                        </fieldset>
-                        <fieldset className="col-12 ">
-                            <label htmlFor="prevperformance">
-                                Previous match performance
-                            </label>
-                            <textarea
-                                name="prevperformance"
-                                id="prevperformance"
-                                ref={Performance}></textarea>
-                        </fieldset>
-                        <fieldset className="col-12 mb-0">
-                            <button
-                                className="btn bg-gradient-info mt-3 d-flex align-items-center"
-                                type="submit">
-                                Save
-                                {submitting && (
-                                    <div
-                                        className="spinner-border text-white d-block ms-3"
-                                        role="status">
-                                        <span className="visually-hidden">Loading...</span>
-                                    </div>
-                                )}
-                            </button>
-                        </fieldset>
-                    </form>
-                </div>
-            </main>
-        </>
-    );
+     // Add the new player data
+     const docRef = await addDoc(collection(db, "players"), data);
+     alert("Data saved");
+     setsubmitting(false);
+     route.push("/players");
+   } catch (error) {
+     console.error("Error adding document: ", error);
+     setsubmitting(false);
+   }
+ };
+  return (
+    <>
+      <Head>
+        <title>Add new player</title>
+      </Head>
+      <SIdebar />
+      <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
+        <div className="edit__form">
+          <h2>Fill the details</h2>
+          <form className={`row`} onSubmit={(e) => submitData(e)}>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                ref={Name}
+                pattern="[A-Z a-z.]*"
+                title="Only alphabets and dots are allowed. Numbers are not allowed."
+                required
+              />
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                ref={Email}
+                required
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                title="Please enter a valid email address."
+              />
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="Password">Password</label>
+              <input type="text" id="Password" ref={Password} required />
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="age">Age {Age.current.value}</label>
+              <input
+                type="range"
+                min={18}
+                max={30}
+                id="age"
+                ref={Age}
+                value={ageValue}
+                onChange={handleChange}
+              />
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="gender">Gender</label>
+              <select name="gender" id="gender" ref={Gender}>
+                <option value="Male">Male</option>
+              </select>
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="position">Position</label>
+              <select name="position" id="position" ref={Position}>
+                <option value="Goalkeeper">Goalkeeper</option>
+                <option value="Center-Back">Center-Back</option>
+                <option value="Full-Back">Full-Back</option>
+                <option value="Wing-Back">Wing-Back</option>
+                <option value="Midfielders">Midfielders</option>
+                <option value="Forwards">Forwards</option>
+              </select>
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="language">Mother tongue</label>
+              <select name="language" id="language" ref={Mother_tongue}>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Malayalam">Malayalam</option>
+                <option value="Tamil">Tamil</option>
+              </select>
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="nationality">Nationality</label>
+              <select name="nationality" id="nationality" ref={Nationality}>
+                <option value="India">India</option>
+                <option value="USA">USA</option>
+                <option value="Pakistan">Pakistan</option>
+                <option value="Bangladesh">Bangladesh</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="UAE">UAE</option>
+              </select>
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="height">Height (in feet.)</label>
+              <input
+                type="number"
+                min={5.5}
+                max={6.11}
+                step={0.01}
+                id="height"
+                ref={Height}
+              />
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="weight">Weight (in Kg)</label>
+              <input
+                type="number"
+                min={58}
+                max={80}
+                step={0.01}
+                id="weight"
+                ref={Weight}
+              />
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="foot">Left foor or right foot</label>
+              <select name="foot" id="foot" ref={Foot}>
+                <option value="Right">Right</option>
+                <option value="Left">Left</option>
+              </select>
+            </fieldset>
+            <fieldset className="col-12 ">
+              <label htmlFor="prevperformance">
+                Previous match performance
+              </label>
+              <textarea
+                name="prevperformance"
+                id="prevperformance"
+                ref={Performance}></textarea>
+            </fieldset>
+            <fieldset className="col-12 ">
+              <label htmlFor="prevTrainingperformance">
+                Previous training match performance
+              </label>
+              <textarea
+                name="prevTrainingperformance"
+                id="prevTrainingperformance"
+                ref={TrainingPerformance}></textarea>
+            </fieldset>
+            <fieldset className="col-12 mb-0">
+              <button
+                className="btn bg-gradient-info mt-3 d-flex align-items-center"
+                type="submit">
+                Save
+                {submitting && (
+                  <div
+                    className="spinner-border text-white d-block ms-3"
+                    role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                )}
+              </button>
+            </fieldset>
+          </form>
+        </div>
+      </main>
+    </>
+  );
 };
 
 export default index;

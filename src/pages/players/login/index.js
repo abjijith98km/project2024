@@ -74,7 +74,8 @@ const index = () => {
                                         <form onSubmit={(e) => handleLogin(e)}>
                                             <label>Email</label>
                                             <div className="mb-3">
-                                                <input type="email" className="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" ref={username} required />
+                                                <input type="email" className="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" ref={username} required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                                                    title="Please enter a valid email address." />
                                             </div>
                                             <label>Password</label>
                                             <div className="mb-3">

@@ -50,14 +50,14 @@ const ViewDetails = ({ id }) => {
       </Head>
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg pe-3 pt-5">
         <div className="edit__form mx-5" style={{ width: "auto" }}>
-          <Link href={`/players/profile/edit/${id}`}
-            className="btn bg-gradient-info mt-3 mb-4 float-end"
-          >
+          <Link
+            href={`/players/profile/edit/${id}`}
+            className="btn bg-gradient-info mt-3 mb-4 float-end">
             Edit
           </Link>
-          <button onClick={(e) => signMeOut(e)}
-            className="btn bg-gradient-primary mt-3 me-4 mb-4 float-end"
-          >
+          <button
+            onClick={(e) => signMeOut(e)}
+            className="btn bg-gradient-primary mt-3 me-4 mb-4 float-end">
             Log out
           </button>
           <h2 className="mb-5">Profile</h2>
@@ -115,7 +115,11 @@ const ViewDetails = ({ id }) => {
                 </h6>
                 <h6 className="col-12 col-md-12 mb-4">
                   <strong>Previous match performance: </strong>
-                  {attendanceList?.Performance}
+                  <p style={{'white-space':'break-spaces'}}>{attendanceList?.Performance}</p>
+                </h6>
+                <h6 className="col-12 col-md-12 mb-4">
+                  <strong>Previous training performance: </strong>
+                  <p style={{'white-space':'break-spaces'}}> {attendanceList?.TrainingPerformance}</p>
                 </h6>
               </div>
             </>

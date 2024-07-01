@@ -20,11 +20,17 @@ const index = ({ id }) => {
   const Height = useRef();
   const Mother_tongue = useRef();
   const Nationality = useRef();
-  const Performance = useRef();
+  const Performance = useRef('');
+  const TrainingPerformance = useRef('');
   const Position = useRef();
   const Weight = useRef();
+  const Password = useRef("");
 
   const router = useRouter();
+  const [ageValue, setAgeValue] = useState(18);
+  const handleChange = (e) => {
+    setAgeValue(e.target.value);
+  };
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -54,21 +60,25 @@ const index = ({ id }) => {
   useEffect(() => {
     deliverDate();
 
-    return () => {};
+    return () => { };
   }, [player]);
 
   const deliverDate = () => {
     Name.current.value = player?.Name;
     Age.current.value = player?.Age;
+    setAgeValue(player?.Age)
     Email.current.value = player?.Email;
     Foot.current.value = player?.Foot;
     Gender.current.value = player?.Gender;
     Height.current.value = player?.Height;
-    Mother_tongue.current.value = player?.Mother_tongue;
+    Password.current.value = player?.Password,
+      Mother_tongue.current.value = player?.Mother_tongue;
     Nationality.current.value = player?.Nationality;
     Performance.current.value = player?.Performance;
+    TrainingPerformance.current.value = player?.TrainingPerformance;
     Position.current.value = player?.Position;
     Weight.current.value = player?.Weight;
+
   };
   const submitData = async (e) => {
     e.preventDefault();
@@ -80,9 +90,11 @@ const index = ({ id }) => {
       Foot: Foot.current.value,
       Gender: Gender.current.value,
       Height: Height.current.value,
+      Password: Password.current.value,
       Mother_tongue: Mother_tongue.current.value,
       Nationality: Nationality.current.value,
       Performance: Performance.current.value,
+      TrainingPerformance: TrainingPerformance.current.value,
       Position: Position.current.value,
       Weight: Weight.current.value,
     };
@@ -118,31 +130,67 @@ const index = ({ id }) => {
             onSubmit={(e) => submitData(e)}>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="name">Name</label>
-              <input type="text" id="name" ref={Name} />
+              <input
+                type="text"
+                id="name"
+                ref={Name}
+                pattern="[A-Za-z.]*"
+                title="Only alphabets and dots are allowed. Numbers are not allowed."
+                required
+              />
             </fieldset>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="email">Email</label>
-              <input type="email" id="email" ref={Email} />
+              <input
+                type="email"
+                id="email"
+                ref={Email}
+                required
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                title="Please enter a valid email address."
+              />
             </fieldset>
             <fieldset className="col-12 col-md-6">
-              <label htmlFor="age">Age</label>
-              <input type="number" id="age" ref={Age} />
+              <label htmlFor="Password">Password</label>
+              <input type="text" id="Password" ref={Password} required />
+            </fieldset>
+            <fieldset className="col-12 col-md-6">
+              <label htmlFor="age">Age {Age?.current?.value}</label>
+              <input
+                type="range"
+                min={18}
+                max={30}
+                id="age"
+                ref={Age}
+                value={ageValue}
+                onChange={handleChange}
+              />
             </fieldset>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="gender">Gender</label>
               <select name="gender" id="gender" ref={Gender}>
                 <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Not Disclosed">Not Disclosed</option>
               </select>
             </fieldset>
             <fieldset className="col-12 col-md-6">
-              <label htmlFor="position">Poition</label>
-              <input type="text" id="position" ref={Position} />
+              <label htmlFor="position">Position</label>
+              <select name="position" id="position" ref={Position}>
+                <option value="Goalkeeper">Goalkeeper</option>
+                <option value="Center-Back">Center-Back</option>
+                <option value="Full-Back">Full-Back</option>
+                <option value="Wing-Back">Wing-Back</option>
+                <option value="Midfielders">Midfielders</option>
+                <option value="Forwards">Forwards</option>
+              </select>
             </fieldset>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="language">Mother tongue</label>
-              <input type="text" id="language" ref={Mother_tongue} />
+              <select name="language" id="language" ref={Mother_tongue}>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Malayalam">Malayalam</option>
+                <option value="Tamil">Tamil</option>
+              </select>
             </fieldset>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="nationality">Nationality</label>
@@ -156,12 +204,28 @@ const index = ({ id }) => {
               </select>
             </fieldset>
             <fieldset className="col-12 col-md-6">
-              <label htmlFor="height">Height (in feet.)</label>
-              <input type="text" id="height" ref={Height} />
+              <label htmlFor="height">
+                Height (in feet.)
+              </label>
+              <input
+                type="number"
+                min={5.5}
+                max={6.11}
+                step={0.01}
+                id="height"
+                ref={Height}
+              />
             </fieldset>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="weight">Weight (in Kg)</label>
-              <input type="text" id="weight" ref={Weight} />
+              <input
+                type="number"
+                min={58}
+                max={80}
+                step={0.01}
+                id="weight"
+                ref={Weight}
+              />
             </fieldset>
             <fieldset className="col-12 col-md-6">
               <label htmlFor="foot">Left foor or right foot</label>
@@ -178,6 +242,16 @@ const index = ({ id }) => {
                 name="prevperformance"
                 id="prevperformance"
                 ref={Performance}></textarea>
+            </fieldset>
+
+            <fieldset className="col-12 ">
+              <label htmlFor="prevperformance">
+                Previous training session performance
+              </label>
+              <textarea
+                name="prevperformance"
+                id="prevperformance"
+                ref={TrainingPerformance}></textarea>
             </fieldset>
             <fieldset className="col-12 mb-0">
               <button

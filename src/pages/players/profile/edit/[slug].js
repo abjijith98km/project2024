@@ -24,8 +24,12 @@ const index = ({ id }) => {
     // const Performance = useRef();
     const Position = useRef("");
     const Weight = useRef("");
+    const [ageValue, setAgeValue] = useState(18);
 
     const router = useRouter();
+    const handleChange = (e) => {
+        setAgeValue(e.target.value);
+    };
 
     useEffect(() => {
         const USERLOGGED_IN = localStorage.getItem('USERLOGGED_IN')
@@ -123,35 +127,67 @@ const index = ({ id }) => {
                         onSubmit={(e) => submitData(e)}>
                         <fieldset className="col-12 col-md-6">
                             <label htmlFor="name">Name</label>
-                            <input type="text" id="name" ref={Name} />
+                            <input
+                                type="text"
+                                id="name"
+                                ref={Name}
+                                pattern="[A-Z a-z.]*"
+                                title="Only alphabets and dots are allowed. Numbers are not allowed."
+                                required
+                            />
+                        </fieldset>
+                        <fieldset className="col-12 col-md-6 opacity-50">
+                            <label htmlFor="email">Email (To change your email, please contact the admin)</label>
+                            <input
+                                type="email"
+                                id="email"
+                                ref={Email}
+                                required
+                                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                                title="Please enter a valid email address."
+                            />
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
-                            <label htmlFor="email">Email</label>
-                            <input type="email" id="email" ref={Email} />
+                            <label htmlFor="Password">Password</label>
+                            <input type="text" id="Password" ref={Password} required />
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
-                            <label htmlFor="password">Password</label>
-                            <input type="text" id="password" ref={Password} />
-                        </fieldset>
-                        <fieldset className="col-12 col-md-6">
-                            <label htmlFor="age">Age</label>
-                            <input type="number" id="age" ref={Age} />
+                            <label htmlFor="age">Age {Age.current.value}</label>
+                            <input
+                                type="range"
+                                min={18}
+                                max={30}
+                                id="age"
+                                ref={Age}
+                                value={ageValue}
+                                onChange={handleChange}
+                            />
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
                             <label htmlFor="gender">Gender</label>
                             <select name="gender" id="gender" ref={Gender}>
                                 <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Not Disclosed">Not Disclosed</option>
                             </select>
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
-                            <label htmlFor="position">Poition</label>
-                            <input type="text" id="position" ref={Position} />
+                            <label htmlFor="position">Position</label>
+                            <select name="position" id="position" ref={Position}>
+                                <option value="Goalkeeper">Goalkeeper</option>
+                                <option value="Center-Back">Center-Back</option>
+                                <option value="Full-Back">Full-Back</option>
+                                <option value="Wing-Back">Wing-Back</option>
+                                <option value="Midfielders">Midfielders</option>
+                                <option value="Forwards">Forwards</option>
+                            </select>
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
                             <label htmlFor="language">Mother tongue</label>
-                            <input type="text" id="language" ref={Mother_tongue} />
+                            <select name="language" id="language" ref={Mother_tongue}>
+                                <option value="English">English</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Malayalam">Malayalam</option>
+                                <option value="Tamil">Tamil</option>
+                            </select>
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
                             <label htmlFor="nationality">Nationality</label>
@@ -165,12 +201,28 @@ const index = ({ id }) => {
                             </select>
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
-                            <label htmlFor="height">Height (in feet.)</label>
-                            <input type="text" id="height" ref={Height} />
+                            <label htmlFor="height">
+                                Height (in feet.)
+                            </label>
+                            <input
+                                type="number"
+                                min={5.5}
+                                max={6.11}
+                                step={0.01}
+                                id="height"
+                                ref={Height}
+                            />
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
                             <label htmlFor="weight">Weight (in Kg)</label>
-                            <input type="text" id="weight" ref={Weight} />
+                            <input
+                                type="number"
+                                min={58}
+                                max={80}
+                                step={0.01}
+                                id="weight"
+                                ref={Weight}
+                            />
                         </fieldset>
                         <fieldset className="col-12 col-md-6">
                             <label htmlFor="foot">Left foor or right foot</label>
@@ -179,7 +231,7 @@ const index = ({ id }) => {
                                 <option value="Left">Left</option>
                             </select>
                         </fieldset>
-
+                       
                         <fieldset className="col-12 mb-0">
                             <button
                                 className="btn bg-gradient-info mt-3 d-flex align-items-center"
