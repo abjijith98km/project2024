@@ -98,7 +98,7 @@ const ViewDetails = ({ id }) => {
                   {attendanceList?.Height}
                 </h6>
                 <h6 className="col-12 col-md-6 mb-4">
-                  <strong>Height: </strong>
+                  <strong>Weight: </strong>
                   {attendanceList?.Weight}
                 </h6>
                 <h6 className="col-12 col-md-6 mb-4">
